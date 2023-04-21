@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
@@ -45,10 +46,11 @@ namespace craigs.Function
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
             var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
-
+            //response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+            response.Headers.Add("Content-Type", "application/json; charset=utf-8");
             var answer = Answers[r.Next(0, Answers.Count)];
-            response.WriteString(answer.Text);
+            var answerJSON = JsonSerializer.Serialize(answer);
+            response.WriteString(answerJSON);
             //response.WriteString("Welcome to Azure Functions!");
 
             return response;
